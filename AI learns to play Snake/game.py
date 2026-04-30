@@ -57,5 +57,3 @@ while running:
     # ==================== refreshing/creating new frames ====================
     pygame.display.update()
 pygame.quit()
-
-print('all done')
