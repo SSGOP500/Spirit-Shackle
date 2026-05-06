@@ -4,7 +4,7 @@ class SnakeEnv:
     # ====================  defining self/snake/agent  ====================
     def __init__(self):
         self.grid_size=11
-        self.snake_position=[(6,6),(6,5),(6,4)]
+        self.snake_position=[(5,5),(5,6),(5,7)]
         self.attempts=0
         self.deaths=0
         self.reward=0
@@ -24,13 +24,13 @@ class SnakeEnv:
         new_x=self.snake_position[0][0]
         new_y=self.snake_position[0][1]
         if direction == 'Up':
-            new_y += 1
-        elif direction == 'Down':
             new_y -= 1
         elif direction == 'Right':
             new_x +=1
-        elif direction == 'left':
+        elif direction == 'Left':
             new_x -=1
+        elif direction == 'Down':
+            new_y +=1    
         else:
             pass          
         self.snake_position.insert(0,(new_x,new_y))    
@@ -74,7 +74,7 @@ class SnakeEnv:
             return self.snake_position, self.reward, self.done
     # ==================== reset ====================
     def reset(self):
-        self.snake_position = [(6,6),(6,5),(6,4)]
+        self.snake_position = [(5,5),(5,6),(5,7)]
         self.reward = 0
         self.done = False
         self.spawn_food()

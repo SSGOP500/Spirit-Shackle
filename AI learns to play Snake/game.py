@@ -4,7 +4,7 @@ from env import SnakeEnv
 # ==================== innit ====================
 pygame.init()
 # ==================== display size ====================
-screen = pygame.display.set_mode((500,400))
+screen = pygame.display.set_mode((500, 400))
 # ==================== tick speed ====================
 clock = pygame.time.Clock()
 # ==================== env ====================
@@ -36,10 +36,13 @@ while running:
     clock.tick(5)
     # ==================== snake visualization ====================
     for segment in env.snake_position:
-        x, y = segment
+        x,y = segment
         pixel_x = offset_x + x * cell_size
         pixel_y = offset_y + y * cell_size
-        pygame.draw.rect(screen,(0, 255, 0),(pixel_x, pixel_y, cell_size, cell_size))
+        if segment == env.snake_position[0]:
+            pygame.draw.rect(screen,(0, 75, 0),(pixel_x, pixel_y, cell_size, cell_size))
+        else:
+            pygame.draw.rect(screen,(0, 255, 0),(pixel_x, pixel_y, cell_size, cell_size))
     # ==================== food visualization ====================
     fx=env.food_position[0]
     pixel_fx = offset_x + fx * cell_size
