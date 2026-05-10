@@ -10,6 +10,7 @@ class SnakeEnv:
         self.reward=0
         self.done=False
         self.spawn_food()
+        self.direction="Up"
     # ====================  spawning of food ====================
     def spawn_food(self):
         while True:
@@ -78,4 +79,5 @@ class SnakeEnv:
         self.reward = 0
         self.done = False
         self.spawn_food()
+        self.direction = "Up"
         return self.snake_position, self.reward, self.done

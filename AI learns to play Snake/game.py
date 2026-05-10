@@ -3,6 +3,10 @@ import pygame
 from env import SnakeEnv
 # ==================== innit ====================
 pygame.init()
+# ==================== score ====================
+score = 0
+# ==================== game running ====================
+game_active = False
 # ==================== display size ====================
 screen = pygame.display.set_mode((500, 400))
 # ==================== tick speed ====================
@@ -33,7 +37,7 @@ while running:
         zy = offset_y + y * cell_size
         pygame.draw.line(screen, (60,60,60), (offset_x, zy), (offset_x + grid, zy))
     # ==================== tickspeed ====================
-    clock.tick(5)
+    clock.tick(8)
     # ==================== snake visualization ====================
     for segment in env.snake_position:
         x,y = segment
@@ -49,14 +53,37 @@ while running:
     fy=env.food_position[1]
     pixel_fy = offset_y + fy * cell_size
     pygame.draw.rect(screen,(255,0,0),(pixel_fx,pixel_fy,cell_size,cell_size))
-    # ==================== closing window ====================
+    # ==================== score visualization ====================
+    score += env.reward//5
+    score_font = pygame.font.SysFont("Comicsans", 18)
+    score_text = score_font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(score_text, (10, 10))
+    # ==================== event handling ====================
     for event in pygame.event.get():
+        # ==================== quitting ====================
         if event.type == pygame.QUIT:
             running = False
-    # ==================== stopping ====================
-    if done:
-        env.reset()
-        done = False
+        # ==================== getting input ====================
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                env.direction = "Up"
+            elif event.key == pygame.K_DOWN:
+                env.direction = "Down"
+            elif event.key == pygame.K_RIGHT:
+                env.direction = "Right"
+            elif event.key == pygame.K_LEFT:
+                    env.direction = "Left"
+            # ==================== game start after pause ====================
+            elif event.key == pygame.K_SPACE:
+                game_active = True
+    # ==================== if game is running ====================
+    if game_active:
+        env.snake_position, env.reward, env.done = env.step(env.direction)
+        # ==================== stopping ====================
+        if env.done:
+            game_active = False
+            env.reset()
+            score = 0
     # ==================== refreshing/creating new frames ====================
     pygame.display.update()
 pygame.quit()
