@@ -10,7 +10,7 @@ class SnakeEnv:
         self.reward=0
         self.done=False
         self.spawn_food()
-        self.direction="Up"
+        self.action=0
     # ====================  spawning of food ====================
     def spawn_food(self):
         while True:
@@ -21,24 +21,36 @@ class SnakeEnv:
             if self.food_position not in self.snake_position:
                 break    
     # ====================  movement of snake ====================
-    def move(self,direction):
+    def move(self,action):
         new_x=self.snake_position[0][0]
         new_y=self.snake_position[0][1]
-        if direction == 'Up':
+        if action == 0:
             new_y -= 1
-        elif direction == 'Right':
+            last_action = 0
+        elif action == 3:
             new_x +=1
-        elif direction == 'Left':
+            last_action = 3
+        elif action == 2:
             new_x -=1
-        elif direction == 'Down':
-            new_y +=1    
+            last_action = 2
+        elif action == 1:
+            new_y +=1  
+            last_action = 1
         else:
             pass          
-        self.snake_position.insert(0,(new_x,new_y))    
+        self.snake_position.insert(0,(new_x,new_y))   
+        if action == 0 and last_action == 1:
+            return
+        elif action == 1 and last_action == 0:
+            return
+        elif action == 2 and last_action == 3:
+            return
+        elif action == 3 and last_action == 2:
+            return
     # ==================== steps taken ====================
-    def step(self,direction):
+    def step(self,action):
         self.reward=0
-        self.move(direction)
+        self.move(action)
     # ==================== penalty condition ====================
         if self.snake_position[0][0]<0:
             self.reward -=1
@@ -79,5 +91,5 @@ class SnakeEnv:
         self.reward = 0
         self.done = False
         self.spawn_food()
-        self.direction = "Up"
+        self.action = "Up"
         return self.snake_position, self.reward, self.done

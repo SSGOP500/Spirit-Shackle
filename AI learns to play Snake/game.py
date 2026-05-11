@@ -1,4 +1,3 @@
-
 import pygame
 from env import SnakeEnv
 # ==================== innit ====================
@@ -54,7 +53,8 @@ while running:
     pixel_fy = offset_y + fy * cell_size
     pygame.draw.rect(screen,(255,0,0),(pixel_fx,pixel_fy,cell_size,cell_size))
     # ==================== score visualization ====================
-    score += env.reward//5
+    if env.reward == 5:
+        score += 1
     score_font = pygame.font.SysFont("Comicsans", 18)
     score_text = score_font.render(f"Score: {score}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
@@ -66,19 +66,19 @@ while running:
         # ==================== getting input ====================
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                env.direction = "Up"
+                env.action = 0
             elif event.key == pygame.K_DOWN:
-                env.direction = "Down"
-            elif event.key == pygame.K_RIGHT:
-                env.direction = "Right"
+                env.action = 1
             elif event.key == pygame.K_LEFT:
-                    env.direction = "Left"
+                env.action = 2
+            elif event.key == pygame.K_RIGHT:
+                env.action = 3
             # ==================== game start after pause ====================
             elif event.key == pygame.K_SPACE:
                 game_active = True
     # ==================== if game is running ====================
     if game_active:
-        env.snake_position, env.reward, env.done = env.step(env.direction)
+        state,reward,done = env.step(env.action)
         # ==================== stopping ====================
         if env.done:
             game_active = False
