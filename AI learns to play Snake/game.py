@@ -29,29 +29,31 @@ while running:
     # ==================== black screen ====================
     screen.fill((0,0,0))
     # ==================== grid ====================
-    for x in range(grid_size + 1):
-        zx = offset_x + x * cell_size
-        pygame.draw.line(screen, (60,60,60), (zx, offset_y), (zx, offset_y + grid))
-    for y in range(grid_size + 1):
-        zy = offset_y + y * cell_size
-        pygame.draw.line(screen, (60,60,60), (offset_x, zy), (offset_x + grid, zy))
+    for x in range(grid_size):
+        for y in range(grid_size):
+            pixel_x = offset_x + x * cell_size
+            pixel_y = offset_y + y * cell_size
+            if (x + y) % 2 == 0:
+                cell_color =(15, 15, 20)
+            else:
+                cell_color =(28, 31, 42)
+            pygame.draw.rect(screen,cell_color,(pixel_x, pixel_y, cell_size, cell_size))
     # ==================== tickspeed ====================
     clock.tick(8)
     # ==================== snake visualization ====================
-    for segment in env.snake_position:
-        x,y = segment
+    for index, segment in enumerate(env.snake_position):
+        x, y = segment
         pixel_x = offset_x + x * cell_size
         pixel_y = offset_y + y * cell_size
-        if segment == env.snake_position[0]:
-            pygame.draw.rect(screen,(0, 75, 0),(pixel_x, pixel_y, cell_size, cell_size))
-        else:
-            pygame.draw.rect(screen,(0, 255, 0),(pixel_x, pixel_y, cell_size, cell_size))
+        color_constant = index / (len(env.snake_position) - 1)
+        normalized_color = 85 + color_constant * (155 - 85)
+        pygame.draw.rect(screen,(0,normalized_color,0),(pixel_x,pixel_y,cell_size,cell_size),border_radius=8)
     # ==================== food visualization ====================
     fx=env.food_position[0]
     pixel_fx = offset_x + fx * cell_size
     fy=env.food_position[1]
     pixel_fy = offset_y + fy * cell_size
-    pygame.draw.rect(screen,(255,0,0),(pixel_fx,pixel_fy,cell_size,cell_size))
+    pygame.draw.rect(screen,(255,0,0),(pixel_fx,pixel_fy,cell_size,cell_size), border_radius=10)
     # ==================== score visualization ====================
     if env.reward == 5:
         score += 1
@@ -73,7 +75,7 @@ while running:
                 env.action = 2
             elif event.key == pygame.K_RIGHT:
                 env.action = 3
-            # ==================== game start after pause ====================
+            # ==================== game start ====================
             elif event.key == pygame.K_SPACE:
                 game_active = True
     # ==================== if game is running ====================
