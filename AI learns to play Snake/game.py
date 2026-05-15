@@ -48,8 +48,8 @@ while running:
         color_constant = index / (len(env.snake_position) - 1)
         normalized_color = 85 + color_constant * (155 - 85)
         pygame.draw.rect(screen,(0,normalized_color,0),(pixel_x,pixel_y,cell_size,cell_size),border_radius=8)
+        # ==================== eye visualization ====================
         if index == 0:
-            # ==================== eye visualization ====================
             eye_x = pixel_x + cell_size // 2
             eye_y = pixel_y + cell_size // 2
             eye_offset_x = cell_size // 5
@@ -58,8 +58,22 @@ while running:
             pupil_radius = eye_radius // 2
             pygame.draw.circle(screen,(255,255,255),(eye_x-eye_offset_x,eye_y-eye_offset_y),eye_radius)
             pygame.draw.circle(screen,(255,255,255),(eye_x+eye_offset_x,eye_y-eye_offset_y),eye_radius)
-            pygame.draw.circle(screen,(0,0,0),(eye_x-eye_offset_x,eye_y-eye_offset_y),pupil_radius)
-            pygame.draw.circle(screen,(0,0,0),(eye_x+eye_offset_x,eye_y-eye_offset_y),pupil_radius)
+            # ==================== eye movement ====================
+            if env.action == 0:
+                pygame.draw.circle(screen,(0,0,0),(eye_x-eye_offset_x,eye_y-eye_offset_y-3),pupil_radius)
+                pygame.draw.circle(screen,(0,0,0),(eye_x+eye_offset_x,eye_y-eye_offset_y-3),pupil_radius)
+            elif env.action == 1:
+                pygame.draw.circle(screen,(0,0,0),(eye_x-eye_offset_x,eye_y-eye_offset_y+3),pupil_radius)
+                pygame.draw.circle(screen,(0,0,0),(eye_x+eye_offset_x,eye_y-eye_offset_y+3),pupil_radius)
+            elif env.action == 2:
+                pygame.draw.circle(screen,(0,0,0),(eye_x-eye_offset_x-3,eye_y-eye_offset_y),pupil_radius)
+                pygame.draw.circle(screen,(0,0,0),(eye_x+eye_offset_x-3,eye_y-eye_offset_y),pupil_radius)
+            elif env.action == 3:
+                pygame.draw.circle(screen,(0,0,0),(eye_x-eye_offset_x+3,eye_y-eye_offset_y),pupil_radius)
+                pygame.draw.circle(screen,(0,0,0),(eye_x+eye_offset_x+3,eye_y-eye_offset_y),pupil_radius)
+            else:
+                pygame.draw.circle(screen,(0,0,0),(eye_x-eye_offset_x,eye_y-eye_offset_y),pupil_radius)
+                pygame.draw.circle(screen,(0,0,0),(eye_x+eye_offset_x,eye_y-eye_offset_y),pupil_radius)
     # ==================== food visualization ====================
     fx=env.food_position[0]
     pixel_fx = offset_x + fx * cell_size
