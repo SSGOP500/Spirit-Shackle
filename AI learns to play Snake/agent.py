@@ -6,5 +6,5 @@ pygame.init()
 class Agent:
     # ====================  defining  ====================
     def __init__(self):
-        return
+        ...
         

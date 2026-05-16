@@ -13,9 +13,11 @@ clock = pygame.time.Clock()
 # ==================== env ====================
 env = SnakeEnv()
 env.reset()
-# ==================== running and done ====================
+# ==================== game states ====================
 running = True
 done = False
+mode = None
+render = None
 # ==================== grid and pixels ====================
 cell_size = 30
 grid_size = env.grid_size
@@ -91,19 +93,26 @@ while running:
         # ==================== quitting ====================
         if event.type == pygame.QUIT:
             running = False
-        # ==================== getting input ====================
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                env.action = 0
-            elif event.key == pygame.K_DOWN:
-                env.action = 1
-            elif event.key == pygame.K_LEFT:
-                env.action = 2
-            elif event.key == pygame.K_RIGHT:
-                env.action = 3
-            # ==================== game start ====================
-            elif event.key == pygame.K_SPACE:
-                game_active = True
+            # ==================== modes ====================
+            if event.key == pygame.K_m:
+                mode = "manual"
+            elif event.key == pygame.K_i:
+                mode = "ai"
+            # ==================== manual mode ====================
+            if mode == "manual":
+                # ==================== getting input ====================
+                    if event.key == pygame.K_UP:
+                        env.action = 0
+                    elif event.key == pygame.K_DOWN:
+                        env.action = 1
+                    elif event.key == pygame.K_LEFT:
+                        env.action = 2
+                    elif event.key == pygame.K_RIGHT:
+                        env.action = 3
+                    # ==================== game start ====================
+                    elif event.key == pygame.K_SPACE:
+                        game_active = True
     # ==================== if game is running ====================
     if game_active:
         state,reward,done = env.step(env.action)
