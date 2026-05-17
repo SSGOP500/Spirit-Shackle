@@ -1,5 +1,6 @@
 import pygame
 from env import SnakeEnv
+from agent import Agent
 # ==================== innit ====================
 pygame.init()
 # ==================== score ====================
@@ -10,9 +11,11 @@ game_active = False
 screen = pygame.display.set_mode((500, 400))
 # ==================== tick speed ====================
 clock = pygame.time.Clock()
-# ==================== env ====================
+# ==================== env and agent ====================
 env = SnakeEnv()
 env.reset()
+agent = Agent()
+state = env.get_state()
 # ==================== game states ====================
 running = True
 done = False
@@ -41,7 +44,7 @@ while running:
                 cell_color =(28, 31, 42)
             pygame.draw.rect(screen,cell_color,(pixel_x, pixel_y, cell_size, cell_size))
     # ==================== tickspeed ====================
-    clock.tick(8)
+    clock.tick(15)
     # ==================== snake visualization ====================
     for index, segment in enumerate(env.snake_position):
         x, y = segment
@@ -100,19 +103,29 @@ while running:
             elif event.key == pygame.K_i:
                 mode = "ai"
             # ==================== manual mode ====================
-            if mode == "manual":
-                # ==================== getting input ====================
-                    if event.key == pygame.K_UP:
-                        env.action = 0
-                    elif event.key == pygame.K_DOWN:
-                        env.action = 1
-                    elif event.key == pygame.K_LEFT:
-                        env.action = 2
-                    elif event.key == pygame.K_RIGHT:
-                        env.action = 3
-                    # ==================== game start ====================
-                    elif event.key == pygame.K_SPACE:
-                        game_active = True
+    if mode == "manual":
+        # ==================== getting input ====================
+            if event.key == pygame.K_UP:
+                env.action = 0
+            elif event.key == pygame.K_DOWN:
+                env.action = 1
+            elif event.key == pygame.K_LEFT:
+                env.action = 2
+            elif event.key == pygame.K_RIGHT:
+                env.action = 3
+            # ==================== game start ====================
+            elif event.key == pygame.K_SPACE:
+                game_active = True
+    # ==================== ai mode ====================
+    elif mode == "ai":
+        # ==================== game start ====================
+        action = agent.action_selection(state)
+        next_state, reward, done = env.step(action)
+        agent.learn(state, action, reward, next_state, done)
+        state = next_state
+        if done:
+            state,reward,done = env.reset()
+            score = 0
     # ==================== if game is running ====================
     if game_active:
         state,reward,done = env.step(env.action)
