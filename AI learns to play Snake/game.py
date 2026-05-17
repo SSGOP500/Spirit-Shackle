@@ -44,7 +44,7 @@ while running:
                 cell_color =(28, 31, 42)
             pygame.draw.rect(screen,cell_color,(pixel_x, pixel_y, cell_size, cell_size))
     # ==================== tickspeed ====================
-    clock.tick(15)
+    clock.tick(10)
     # ==================== snake visualization ====================
     for index, segment in enumerate(env.snake_position):
         x, y = segment

@@ -1,5 +1,7 @@
 import pygame
 import random
+import pickle
+import os
 from env import SnakeEnv
 # ==================== innit ====================
 pygame.init()
@@ -14,6 +16,7 @@ class Agent:
         self.epsilon_decay=0.9995
         self.epsilon_min=0.01
         self.q_table={}
+        self.load_q_table()
     # ====================  get q value ====================
     def get_q(self,state):
         if state not in self.q_table:
@@ -36,6 +39,15 @@ class Agent:
             target = reward + self.gamma * max(self.get_q(next_state))
         # ====================  learning update ====================
         self.q_table[state][action] += self.lr * (target - current_q)
+    # ====================  save q table ====================
+    def save_q_table(self):
+        with open("q_table.pkl", "wb") as file:
+            pickle.dump(self.q_table, file)
+    # ====================  load q table ====================
+    def load_q_table(self):
+        if os.path.exists("q_table.pkl"):
+            with open("q_table.pkl", "rb") as file:
+                self.q_table = pickle.load(file)
 
 agent = Agent()
 episodes = 1000
@@ -49,4 +61,11 @@ for episode in range(episodes):
         action = agent.action_selection(state)
         next_state, reward, done = env.step(action)
         agent.learn(state,action,reward,next_state,done)
-        state = next_state        
+        state = next_state
+        total_reward += reward
+    # ==================== learning stabilization ====================
+    agent.epsilon = max(agent.epsilon * agent.epsilon_decay, agent.epsilon_min)
+
+agent.save_q_table()
+if episode % 100 == 0:
+    print(episode, total_reward)
