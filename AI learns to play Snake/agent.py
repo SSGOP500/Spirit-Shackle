@@ -10,9 +10,9 @@ env = SnakeEnv()
 class Agent:
     # ====================  defining  ====================
     def __init__(self):
-        self.lr=0.5
-        self.gamma=0.5
-        self.epsilon=0.6
+        self.lr=0.8
+        self.gamma=0.4
+        self.epsilon=0.02
         self.epsilon_decay=0.9995
         self.epsilon_min=0.01
         self.q_table={}
@@ -50,7 +50,7 @@ class Agent:
                 self.q_table = pickle.load(file)
 
 agent = Agent()
-episodes = 1000
+episodes = 10
 # ==================== training loop ====================
 for episode in range(episodes):
     env.reset()
@@ -67,5 +67,5 @@ for episode in range(episodes):
     agent.epsilon = max(agent.epsilon * agent.epsilon_decay, agent.epsilon_min)
 
 agent.save_q_table()
-if episode % 100 == 0:
+if episode % 10 == 0:
     print(episode, total_reward)

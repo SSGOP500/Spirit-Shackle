@@ -102,22 +102,22 @@ while running:
                 mode = "manual"
             elif event.key == pygame.K_i:
                 mode = "ai"
-            # ==================== manual mode ====================
-    if mode == "manual":
-        # ==================== getting input ====================
-            if event.key == pygame.K_UP:
-                env.action = 0
-            elif event.key == pygame.K_DOWN:
-                env.action = 1
-            elif event.key == pygame.K_LEFT:
-                env.action = 2
-            elif event.key == pygame.K_RIGHT:
-                env.action = 3
-            # ==================== game start ====================
-            elif event.key == pygame.K_SPACE:
-                game_active = True
+                    # ==================== manual mode ====================
+            if mode == "manual":
+                # ==================== getting input ====================
+                    if event.key == pygame.K_UP:
+                        env.action = 0
+                    elif event.key == pygame.K_DOWN:
+                        env.action = 1
+                    elif event.key == pygame.K_LEFT:
+                        env.action = 2
+                    elif event.key == pygame.K_RIGHT:
+                        env.action = 3
+                    # ==================== game start ====================
+                    elif event.key == pygame.K_SPACE:
+                        game_active = True
     # ==================== ai mode ====================
-    elif mode == "ai":
+    if mode == "ai":
         # ==================== game start ====================
         action = agent.action_selection(state)
         next_state, reward, done = env.step(action)
